@@ -2,39 +2,48 @@
 
 ## UI changes
 
-- The table viewer was improved and does now provide a categoricaly conditional cell colouring scheme
-- The terminal history has now a search bar
-- It is now possible to hide the main window using `set windowshown=false` and unhide it again. Using `set appautoclose=true`, the app will automatically close itself, once the last open window has been closed. Note that those settings are not saved and only affect NumeRe for the current running session.
+- The starting page was greatly reworked and provides more options.
+- Double-clicking on any embedded cluster in the table viewer window will open the embedded cluster in a new table viewer window. Standard variables can now also be viewed in a table viewer. This is especially useful for vectorial variables.
+- The table viewer can now sort and filter the displayed table according a selected column.
+- You can now change the file filters for each of the default folders in the left tree. The option can be found beneath the path settings in the settings dialog.
+- Detection of readable and loadable files has been improved, so that you can now also read files without known extension.
+- Table autosizing has been sped up and vertical alignment of cells with empty lines has been improved.
+- The method autocompletion recommendation has been improved and should now return better fitting candidates. The autocompletion in the terminal is much faster now.
+- Window layouts are now also part of the dependency analysis and will correctly return their event procedures.
+- The command `install` will now automatically search through the package repository for a package with matching filename.
+- Large tables won't calculate the complete stats anymore, if opened in the table viewer (this is for performance reasons).
 
 ## New and improved functionalities
 
-- `remove` may now also remove folders (and folder structures recursively)
-- *k* means clustering is now available as table method `TAB().kmeansof(...)`
-- New functions: `uuid()`, `strjoin()`, `getdisplayscale()`, `is_void()`, `is_equal()`, `is_ordered()`, `is_unique()`
-- New statistical functions: `rms()`, `skew()`, `exc()`, `stderr()`, `inv_pct()`
-- New time-specific functions: `today()`, `get_utc_offset()`, `is_daylightsavingtime()`, `is_leapyear()`
-- New noise functions: `ridgedmulti()`, `billownoise()`, `voronoinoise()`
-- Functions for converting between different numerical data types and for creating categories were added.
-- NumeRe can now interact with databases using the command `database`. Available interfaces for now are: MySQL/MariaDB, SQLite, ODBC. PostGreSQL is *NOT* supported right now due to dependency issues.
-- Table method updates: Table method modifiers `.scwin()` and `.srwin()` have been added and can be used to define a moving window for multi argument functions. Table method handling has been improved and chaining with the new internal method system is now possible. The new table method modifier `.cells()` together with `.rows` or `.cols` allows for selection of table cells along the direction of application.
-- Table columns can now have (physical) units to represent data even better. The units will be detected automatically (if possible), or you can use the dedicated methods to modify the unit of each column.
-- Tables may now be exported in MarkDown and HTML format and it's now also possible to copy only a part of a table to another table at a desired location using `TAB(i1:i2,j1:j2) = TAB2(i1:i2,j1:j1)` syntax.
-- Local variables may now also be declared within control flow blocks. Note that they are only declared for the first time per execution the control reaches their command.
-- Index-based `for` loops can now have an additional condition as their second argument (i.e. `for (i = 1:0, a !=b)`), which is checked before each loop iteration.
-- The interaction between custom windows and the `window` command has been cleaned and improved. Some interactions will now return more fitting data types. It might be possible that this change will break some existing solutions. Furthermore, the `textfield` can now be configured as `type=markup` to support simplified markdown styling.
-- The tabs created with `group -style=tabs ...` in window layouts can now have an ID and an `onchange` event handler firing when the user changes the tab. It is also possible to access the properties of the tab group using `window ... -get` and `window ... -set`.
-- The window command option `options={KEY-VALUE-LIST}` can be used to modify additional window element properties. This option is currently only supported for `tablegrid` elements, where one can change the minimal number of rows and cols.
+- A possibility to define a post-install script for a package was added to the package creator. The "required version" of packages now uses the correct variant of the current version for checking, e.g. "v.1.1.7.2412". The package creator will now log the last modification time of each bundled procedure in its project file. Once the project is loaded again, it is checked, whether there have been any file modifications in the mean time.
+- It is now possible to set a custom HTTP header and a payload if you want to interact with REST APIs using `url`.
+- The command `print` can now also display a table's contents (the first and last 5 rows) in the terminal.
+- The function `convertunit()` allows for unit conversions towards SI units (like the corresponding table methods).
+- The function `getoverlap()` returns the overlap of all to be passed intervals.
+- The functions `complement()`, `intersection()` and `union()` provide means to apply set theory operations.
+- The new table method `TAB().replacevals()` can be used to replace every occurence of a set of values with new values.
+- The option `nobars` can be used together with `hist` to switch the output graph to a dashed line plot with distinct marks at the bars' positions. This can be handy if you try to compare multiple histograms in a single diagram.
+- Most table methods accept now table column names in addition to column IDs. Note: If there are multiple columns with the same name, in general, all will be used for the table method.
+- The target folders used with `move` or `copy` can now contain wildcards within their path as well and will be replaced by their counterpart of the copied/moved filename, if it exists.
+- Improved and cleaned the `stats` command: some field were renamed or replaced with more important values.
+- The automatic type conversion now avoids automatic conversions from floating point to int.
+- The function `cnt()` will now return 0 if `void` values are inserted as its argument (note that this is not true for an array of `void` values). Completely empty and uninitialized columns and empty tables will now also return `void` instead of `nan` or an empty string.
+- The function `student_t` will no longer subtract 1 from the passed DOF internally.
+- The interface for `odesolve` and `fit` have been adapted to follow the current syntax approach more.
+- The return value of the table method `TAB().indexof()` has been changed to a cluster, where consecutive index sets are stored as embedded clusters.
+- The table method `TAB().anovaof()` will now return the results of multi-dimensional ANOVAs in distinct embedded clusters.
+- **Important:** The table methods `TAB().categoriesof()` and `TAB().categorize()` will now return an array of categories (see function `category()` for reference) instead of a key-value list. **This might break some code.**
 
 ## Experimental features
 
-- Clusters can now be created as hierarchical data structures, i.e. clusters can now contain clusters in their fields. You can use the `.sel(ID)` method for navigating and `.unwrap` to unwrap the whole structure in a single-level cluster. Writing a set of values into a single cluster element will embed them as a sub-structure. Reading this single element, will return the embedded structure.
+No experimental change in this release
 
 ## General changes
 
-- The kernel was greatly rewritten and supports much more different types and functionalities. Strange typing problems shouldn't appear any more. Overall performance should be improved (although at the cost that some segments might run slower)
+- The kernel was greatly rewritten and supports much more different types and functionalities. Strange typing problems shouldn't appear any more. Overall performance should be improved (although at the cost that some segments might run slower; we're still investigating)
 - We now *only* provide a 64 bit version due to limitations of external libraries
 - We'll now provide an up-to-date PDF documentation with every new release (including this one)
-- A *Report an issue* feature has been added, which you can use even without an GitHub account
+- A *Report an issue* feature has been added, which you can use even without an GitHub account. You can also check directly from NumeRe, whether a new release is available.
 - Many improvements and fixes
 
 The complete list of changes can be found in the ChangesLog.
