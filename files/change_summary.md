@@ -2,27 +2,34 @@
 
 ## UI changes
 
-- An optional feature to extract the argument types of functions, methods and procedures based upon their names, was added.
-- Usability of mouse-over tooltips was improved. It should now be possible to show the fulltips of arguments inside of function parentheses again.
-- The auto-indentation functionality does not interfere with CTRL-Z any more.
+- The default UI style has been changed to a more bluish theme. Click on "RESET" for the "UI THEME" within the "Style" tab in the settings dialog to load the new default theme (only if you want to change, of course).
+- The default icon for files used within the file tree has been changed to appear more neutral
 
 ## New and improved functionalities
 
-- The new plotting option `stacked` enables the stacking of `bars` and `hbars` on each other.
-- Bar charts now always include the value y=0. In some situations it is reasonable to enable `origin=sliding` as an additional plotting option.
-- One can now pass custom axis ticks using a list of strings instead of the newline-separated strings.
+- The function `zip()` combines multiple arrays elementwise into embedded clusters in the returned cluster
+- The function `getuserinfo()` will return a key-value list containing user information
+- The command `mail` can be used to send e-mails via a SMTP server
+- The `date()` function will now also accept strings as its "formatting type" parameter
+- `getfileparts()` will now return the host as drive for UNC paths, i.e. `"\\MY.SERVER.TDL"`
+- String functions, which convert one input into an array, do now return arrays of clusters (one for each input element). Notable candidates: `textparse()`, `to_value()`, `split()` and all character classifier functions like `is_alnum()`
+- Functions for base-n encoding `encode_base_n()` and decoding `decode_base_n()` have been added
 
 ## Experimental features
 
-- It is now possible to create new columns in tables if values are assigned to an unknown column using string indexing with the column headlines, i.e. `TABLE(:, "MY-COL-HEADLINE")`. The new column will be appended at the end of the table.
-- `matop` functions now also accept matrix results as their scalar inputs. For consecutive scalar inputs, even a single vector can be passed, e.g. `matop zero({1,3})`
-- We added support for coloured window themes. If you want to test it, the setting can be found at the end of the syntax colour list. Recommended colour sets are the blue set (foreground: `rgb(159,213,244)` and background: `rgb(234,245,253)`), the light grey set (foreground: `rgb(82,82,82)`, background: `rgb(181,183,185)`) and the splash-image set (foreground: `rgb(214,177,182)`, background: `rgb(222,237,234)`)
+- Structures were added: `dictstruct` (a structure/dictionary mixture), `file` (for arbitrary file accesses), `path` (for all type of paths), `queue` (FIFO storage) and `stack` (LIFO storage)
+- `readxml()` can import XML files and `readjson()` can import JSON files (both are imported as `dictstruct` instances)
+- The command `obj` can be used to declare procedure-local objects and structures (including categories)
+- The index operator `VAR[IDX]` can now be used on usual vectors. It also accepts the dimension variable `nlen`
 
 ## General changes
 
-- Increased performance of `stfa`, `audioread` and some statistics functions.
-- `write` now uses `noquotes` as default. The parameter was removed and has no effect any more.
-- If the values `nan` and `inf` are used within an index vector, then they are treated as invalid values and will always return an invalid value.
+- A duration type is now available to increase the date-time logic
+- The performance of the new parser implementation was greatly improved and is now at about 70-80% of the previous approach for scalar operations
+- Vectorial variables are now supported in `matop`, but not fully compatible to inline created vectors using the brace syntax `{x,y,z,...}`, because they will not be auto-expanded to matrices if necessary. To resolve this, either wrap the vectorial variable into additional braces or enclose it into an explicit `repmat()` call. This is a known issue and will be resolved in a future version together with the complete rework of `matop`.
+- Variable method resolution is much more precise now
+- It is now possible to use SQL placeholders in SQL statements and supply the parameters via `params=[PARAMLIST]`
+- HTML exports of tables will now also parse a simplified markdown syntax, so that headlines, code segments, bold and italic text are possible
 - Many improvements and fixes
 
 The complete list of changes can be found in the ChangesLog.
