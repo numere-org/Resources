@@ -2,34 +2,38 @@
 
 ## UI changes
 
-- The default UI style has been changed to a more bluish theme. Click on "RESET" for the "UI THEME" within the "Style" tab in the settings dialog to load the new default theme (only if you want to change, of course).
-- The default icon for files used within the file tree has been changed to appear more neutral
+- 3D matrices will now show their layers next to each other if inspected using the dataviewer.
+- The code analyzer now understands better, what a wrapped line is and will examine the whole (logical) line at once and due to the highly flexible argument list of drawing functions, those are not checked by the code analyzer any more. Also, it won't mark methods that have no required arguments as lacking their parentheses if the user's intent is to stick with the default arguments.
+- The new code parser will handle more constants and heuristics won't get overwritten by generic types like `"any"` any longer.
 
 ## New and improved functionalities
 
-- The function `zip()` combines multiple arrays elementwise into embedded clusters in the returned cluster
-- The function `getuserinfo()` will return a key-value list containing user information
-- The command `mail` can be used to send e-mails via a SMTP server
-- The `date()` function will now also accept strings as its "formatting type" parameter
-- `getfileparts()` will now return the host as drive for UNC paths, i.e. `"\\MY.SERVER.TDL"`
-- String functions, which convert one input into an array, do now return arrays of clusters (one for each input element). Notable candidates: `textparse()`, `to_value()`, `split()` and all character classifier functions like `is_alnum()`
-- Functions for base-n encoding `encode_base_n()` and decoding `decode_base_n()` have been added
+- Functions for bit-level logic and manipulation haven been added: `bitand()`, `bitor()`, `bitxor()`, `bitnot()`, `bitshift()`, `bitmask()` and `bitcast()`
+- It is now possible to enforce an HTTP method in `url` by prefixing the URL in the command with the desired method. The return value of `url` is now always `STR`, even if the contents are byte counts, to make some special cases more robust.
+- TLS and SSL certificates are now validated against a set of known trusted root CAs within `url` and `mail`. There is an option to supply an own certificate or to bypass the check completely.
+- The table method `TAB().convert()` will now also try to convert to a categorical column, if the second argument is set to `"auto"`.
+- Tables do now also correctly handle the `"duration"` data type.
+- An option for a password entry dialog and for setting the `textfield` to password-mode has been added for both via the option `type=pwdentry`
+- It is now possible to control the custom window resizing (`fixedsize`) and whether boxes for iconizing (`hideiconize`) and closing (`hideclose`) should appear.
+- It is now possible to set the opening position of custom windows with `pos={x,y}` as well as fix the window to the uppermost z position `stayontop`.
+- Improved the return of `fwt`, especially the enumeration of the coefficients.
+- A logger object is now available and can be constructed using the function `logger()`.
+- Dict objects can be used to map between two arbitrary types (requiring that the key type to supports a "less-than" relation). Those objects are constructed using the function `dict()`.
+- The path object now has the two methods `PATH.twig` for getting the parent entry of the leaf and `PATH.leafless` for returning a new path without the current leaf.
+- The function `tensorprod()` provides a n-dimensional tensorproduct and also contracts, if necessary. The function `trace()` was extended to support n-dimensional contraction as well.
 
 ## Experimental features
 
-- Structures were added: `dictstruct` (a structure/dictionary mixture), `file` (for arbitrary file accesses), `path` (for all type of paths), `queue` (FIFO storage) and `stack` (LIFO storage)
-- `readxml()` can import XML files and `readjson()` can import JSON files (both are imported as `dictstruct` instances)
-- The command `obj` can be used to declare procedure-local objects and structures (including categories)
-- The index operator `VAR[IDX]` can now be used on usual vectors. It also accepts the dimension variable `nlen`
+- `void` can be assigned to object variables to convert them to an `"object.void"` instance.
 
 ## General changes
 
-- A duration type is now available to increase the date-time logic
-- The performance of the new parser implementation was greatly improved and is now at about 70-80% of the previous approach for scalar operations
-- Vectorial variables are now supported in `matop`, but not fully compatible to inline created vectors using the brace syntax `{x,y,z,...}`, because they will not be auto-expanded to matrices if necessary. To resolve this, either wrap the vectorial variable into additional braces or enclose it into an explicit `repmat()` call. This is a known issue and will be resolved in a future version together with the complete rework of `matop`.
-- Variable method resolution is much more precise now
-- It is now possible to use SQL placeholders in SQL statements and supply the parameters via `params=[PARAMLIST]`
-- HTML exports of tables will now also parse a simplified markdown syntax, so that headlines, code segments, bold and italic text are possible
+- The package repository is now located in GitHub simplyfing the contribution process. It is possible to have secondary package repositories (even private ones), if they provide a similar REST API as GitHub or Gitlab. Look at the description of the [NumeRe::Packages](https://github.com/numere-org/NumeRe-Packages) repository for further insights.
+- Tables do now favor `"value.f64"` over the previous behavior of converting to `"value.cf64"`. This will save a lot of space in many cases.
+- The internal memory consumption of single values was reduced.
+- There are now valid variable prefixes for logical values. Accepted are `l`, `b`, `is`, `do`, `has`. Examples `lSOMETHING bSOMETHING isSOMETHING doSOMETHING hasSOMETHING`
+- All occurences of regular expressions have been updated to be more runtime-efficient.
+- Curvilinear coordinates do now work more consistent across the plotting types.
 - Many improvements and fixes
 
 The complete list of changes can be found in the ChangesLog.
@@ -38,3 +42,4 @@ The complete list of changes can be found in the ChangesLog.
 
 - This is a stable release and builds ontop of the changes from the last release candidate.
 - If you experience troubles with downloads from SourceForge (esp. via MS Edge for Business), consider downloading from Github directly (see assets section at the end of the release notes).
+- If your browser refuses to download or execute the binary, just *f-ing* use Firefox or `winget`.
